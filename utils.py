@@ -1,6 +1,7 @@
 import logging
 
-import tensorflow.compat.v1 as tf
+#import tensorflow.compat.v1 as tf
+import tensorflow._api.v2.compat.v1 as tf
 from object_detection.inputs import train_input
 from object_detection.protos import input_reader_pb2
 from object_detection.builders.dataset_builder import build as build_dataset
