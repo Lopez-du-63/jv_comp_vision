@@ -3,9 +3,9 @@ import io
 import os
 import subprocess
 
-#import tensorflow
 import ray
-import tensorflow.compat.v1 as tf
+#import tensorflow.compat.v1 as tf
+import tensorflow._api.v2.compat.v1 as tf
 from PIL import Image
 from psutil import cpu_count
 
