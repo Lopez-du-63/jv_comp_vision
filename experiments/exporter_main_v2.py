@@ -95,7 +95,8 @@ If side inputs are desired, the following arguments could be appended
 from absl import app
 from absl import flags
 
-import tensorflow.compat.v2 as tf
+#import tensorflow.compat.v2 as tf
+import tensorflow._api.v2.compat.v2 as tf
 from google.protobuf import text_format
 from object_detection import exporter_lib_v2
 from object_detection.protos import pipeline_pb2
