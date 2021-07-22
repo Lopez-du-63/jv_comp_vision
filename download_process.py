@@ -152,6 +152,3 @@ if __name__ == "__main__":
 
     workers = [download_and_process.remote(fn, temp_dir, data_dir) for fn in filenames[:100]]
     _ = ray.get(workers)
-
-
-
