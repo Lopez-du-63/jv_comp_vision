@@ -1,6 +1,8 @@
 import logging
-
+import os
+import io
 #import tensorflow.compat.v1 as tf
+#import tensorflow as tf
 import tensorflow._api.v2.compat.v1 as tf
 from object_detection.inputs import train_input
 from object_detection.protos import input_reader_pb2
@@ -8,6 +10,39 @@ from object_detection.builders.dataset_builder import build as build_dataset
 from object_detection.utils.config_util import get_configs_from_pipeline_file
 from waymo_open_dataset import dataset_pb2 as open_dataset
 
+import numpy as np
+import IPython.display as display
+from PIL import Image
+
+
+def decode_fn(record_bytes):
+  return tf.io.parse_single_example(
+      # Data
+      record_bytes,
+      # Schema
+      {
+        'image/height': tf.io.FixedLenFeature([], dtype=tf.int64),
+        'image/width': tf.io.FixedLenFeature([], dtype=tf.int64),
+        'image/filename': tf.io.FixedLenFeature([], dtype=tf.string),
+        'image/source_id': tf.io.FixedLenFeature([], dtype=tf.string),
+        'image/encoded': tf.io.FixedLenFeature([], dtype=tf.string),
+        'image/format': tf.io.FixedLenFeature([], dtype=tf.string),
+        'image/object/bbox/xmin': tf.io.VarLenFeature(dtype=tf.float32),
+        'image/object/bbox/xmax': tf.io.VarLenFeature(dtype=tf.float32),
+        'image/object/bbox/ymin': tf.io.VarLenFeature(dtype=tf.float32),
+        'image/object/bbox/ymax': tf.io.VarLenFeature(dtype=tf.float32),
+        'image/object/class/text': tf.io.VarLenFeature(dtype=tf.string), 
+        'image/object/class/label': tf.io.VarLenFeature(dtype=tf.int64),
+      }
+  )
+
+def create_dataset(files_path):
+  tf_files_path = []
+  for path in os.listdir(files_path):
+    tf_files_path.append(os.path.join(files_path, path))
+  #files_path + os.listdir(path=files_path)
+  dataset = tf.data.TFRecordDataset(tf_files_path)
+  return dataset
 
 def get_dataset(tfrecord_path, label_map='label_map.pbtxt'):
     """
@@ -23,8 +58,8 @@ def get_dataset(tfrecord_path, label_map='label_map.pbtxt'):
     input_config.tf_record_input_reader.input_path[:] = [tfrecord_path]
     
     dataset = build_dataset(input_config)
-    return dataset
 
+    return dataset
 
 def get_module_logger(mod_name):
     """ simple logger """
@@ -35,7 +70,6 @@ def get_module_logger(mod_name):
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
     return logger
-
 
 def get_train_input(config_path):
   """
