@@ -25,17 +25,17 @@ def split(data_dir):
 
     #training dataset
     train_path = os.path.join(data_dir,'train')
-    os.makedirs(train_path)
+    os.makedirs(train_path, exist_ok=True)
     for file in list_files[0:int(round(0.75*num_files,0))]:
         shutil.move(os.path.join(data_dir, file), train_path)
     #validation dataset
     val_path = os.path.join(data_dir,'val')
-    os.makedirs(val_path)    
+    os.makedirs(val_path, exist_ok=True)   
     for file in list_files[int(round(0.75*num_files,0)):int(round(0.90*num_files,0))]:
         shutil.move(os.path.join(data_dir, file), os.path.join(data_dir,'val', file))
     #create test set
     test_path = os.path.join(data_dir,'test')
-    os.makedirs(test_path)
+    os.makedirs(test_path, exist_ok=True)
     for file in list_files[int(round(0.90*num_files,0)):]:
         shutil.move(os.path.join(data_dir, file), os.path.join(data_dir,'test', file))
 
