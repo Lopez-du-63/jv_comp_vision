@@ -134,7 +134,11 @@ python inference_video.py -labelmap_path label_map.pbtxt --model_path training/e
 This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+
+For the setup, docker file has been modified to install tensorflow 2.5.0.
+Waymo dataset wheel must be installed manually with pip command. The wheel is in the root folder.
+If working on Windows, Developers build must be installed. Otherwise nvidia-docker will not be compatible with docker. On top of that drivers won't be recognized.
+Data is not stored in "/workspace" but in "/data/processed/" folder.
 
 ### Dataset
 #### Dataset analysis
