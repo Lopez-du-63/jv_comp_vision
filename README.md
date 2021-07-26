@@ -131,7 +131,11 @@ python inference_video.py -labelmap_path label_map.pbtxt --model_path training/e
 ## Submission Template
 
 ### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+The target of this project is to get practical knowledge on neural network training. For this purpose a few records will be downloaded from the waymo repository. Its data will be converted to tensorflow compatible format.
+Afterwards manual analysis of the data will be carried. Finally different deep learning architecture and data augmentation strategy will be tried to improve target recognition and classification in pictures/video feeds.
+
+As side learning: Containers and virtual machines were a new thing to me. I knew it existed but never configured one myself. I invested nearly more time in getting a working setup and understanding the concepts behind.
+
 
 ### Set up
 
@@ -143,6 +147,21 @@ Data is not stored in "/workspace" but in "/data/processed/" folder.
 ### Dataset
 #### Dataset analysis
 This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+
+##### Image content
+Images contain for the most part vehicles. We also have certain cross-roads with many pedestrian for training, but not as much. Finally the database does not contain many cyclists.
+
+##### Image quality
+
+Brightness and weather are generally good. This a kind of "perfect situation" learning, where hard situations are barely considered.
+Some of the records still are filmed during night or rainy days, which is a good thing.
+This downside will surely need to be compensated through augmentation.
+
+#### Color spread in the dataset
+![Histogram/ Mean and Std](/images/histogram.JPG)
+
+As we can see, colors are mostly centered between 30 and 150; with a blue pick at 255 which comes from the blue sky.
+
 #### Cross validation
 This section should detail the cross validation strategy and justify your approach.
 
