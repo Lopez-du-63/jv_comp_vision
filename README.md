@@ -1,4 +1,59 @@
 # Object detection in an Urban Environment
+All instructions provided to carry the project are at the bottom to ease reading from mentor.
+
+## Submission
+
+### Project overview
+The target of this project is to get practical knowledge on neural network training. For this purpose a few records will be downloaded from the waymo repository. Its data will be converted to tensorflow compatible format.
+Afterwards manual analysis of the data will be carried. Finally different deep learning architecture and data augmentation strategy will be tried to improve target recognition and classification in pictures/video feeds.
+
+As side learning: Containers and virtual machines were a new thing to me. I knew it existed but never configured one myself. I invested nearly more time in getting a working setup and understanding the concepts behind.
+
+### Set up
+
+For the setup, docker file has been modified to install tensorflow 2.5.0.
+Waymo dataset wheel must be installed manually with pip command. The wheel is in the root folder.
+If working on Windows, Developers build must be installed. Otherwise nvidia-docker will not be compatible with docker. On top of that drivers won't be recognized.
+Data is not stored in "/workspace" but in "/data/processed/" folder.
+
+### Dataset
+#### Dataset analysis
+This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+
+##### Image content
+Images contain for the most part vehicles. We also have certain cross-roads with many pedestrian for training, but not as much. Finally the database does not contain many cyclists.
+
+##### Image quality
+
+Brightness and weather are generally good. This a kind of "perfect situation" learning, where hard situations are barely considered.
+Some of the records still are filmed during night or rainy days, which is a good thing.
+This downside will surely need to be compensated through augmentation.
+
+##### Color spread in the dataset
+![Histogram/ Mean and Std](/images/histogram.JPG)
+
+As we can see, colors are mostly centered between 30 and 150; with a blue pick at 255 which comes from the blue sky.
+
+##### Cross validation
+For the cross validation strategy, a split between training/validation and test dataset will be carried.
+As we have more than 10k images (about the double), and we start training from pre-trained model it is possible to perform this three splits.
+A standard split will be used: 75% for training, 15% for validation and 10% for testing.
+The testing set is used to ensure there is no leakage of information from the training steps into the test dataset (as model is optimized according to results on the validation set).
+
+
+### Training 
+#### Reference experiment
+This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+
+##### Coco metrics for the model
+![Coco Metrics for reference model](/images/metrics_reference.JPG)
+As can be seen, the learning seems to stabilize close the end of the learning.
+
+#### Improve on the reference
+This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+ 
+
+
 
 ## Data
 
@@ -128,47 +183,3 @@ Finally, you can create a video of your model's inferences for any tf record fil
 python inference_video.py -labelmap_path label_map.pbtxt --model_path training/experiment0/exported_model/saved_model --tf_record_path /home/workspace/data/test/tf.record --config_path training/experiment0/pipeline_new.config --output_path animation.mp4
 ```
 
-## Submission Template
-
-### Project overview
-The target of this project is to get practical knowledge on neural network training. For this purpose a few records will be downloaded from the waymo repository. Its data will be converted to tensorflow compatible format.
-Afterwards manual analysis of the data will be carried. Finally different deep learning architecture and data augmentation strategy will be tried to improve target recognition and classification in pictures/video feeds.
-
-As side learning: Containers and virtual machines were a new thing to me. I knew it existed but never configured one myself. I invested nearly more time in getting a working setup and understanding the concepts behind.
-
-
-### Set up
-
-For the setup, docker file has been modified to install tensorflow 2.5.0.
-Waymo dataset wheel must be installed manually with pip command. The wheel is in the root folder.
-If working on Windows, Developers build must be installed. Otherwise nvidia-docker will not be compatible with docker. On top of that drivers won't be recognized.
-Data is not stored in "/workspace" but in "/data/processed/" folder.
-
-### Dataset
-#### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-
-##### Image content
-Images contain for the most part vehicles. We also have certain cross-roads with many pedestrian for training, but not as much. Finally the database does not contain many cyclists.
-
-##### Image quality
-
-Brightness and weather are generally good. This a kind of "perfect situation" learning, where hard situations are barely considered.
-Some of the records still are filmed during night or rainy days, which is a good thing.
-This downside will surely need to be compensated through augmentation.
-
-#### Color spread in the dataset
-![Histogram/ Mean and Std](/images/histogram.JPG)
-
-As we can see, colors are mostly centered between 30 and 150; with a blue pick at 255 which comes from the blue sky.
-
-#### Cross validation
-This section should detail the cross validation strategy and justify your approach.
-
-### Training 
-#### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
-
-#### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
- 
