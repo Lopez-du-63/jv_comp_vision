@@ -18,7 +18,8 @@ Data is not stored in "/workspace" but in "/data/processed/" folder.
 
 ### Dataset
 #### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+At the following link can be found some images extract from the [Exploratory Notebook](https://github.com/Lopez-du-63/jv_comp_vision/blob/main/Exploratory%20Data%20Analysis.ipynb).
+In order to be able to run the notebook, the utils.py from this project must be used. I implemented my own function to create a dataset and parse it; as I couldn't get to work the one which was provided.
 
 ##### Image content
 Images contain for the most part vehicles. We also have certain cross-roads with many pedestrian for training, but not as much. Finally the database does not contain many cyclists.
@@ -42,12 +43,31 @@ The testing set is used to ensure there is no leakage of information from the tr
 
 
 ### Training 
+#### Issues met
+Training the neural network was really resource greedy. I faces all common issues one can face in the field I guess:
+  * Long waiting times: This one can be fixed by only checking what happens in the first thousant step and get a feeling of what is coming
+  * Lack of options from the proto for image transformations: I think Albumentation is a much more powerful tool. But I sticked with the intented project framework. Plus I wouldn't have been able to use the [Explore augmentation notebook](https://github.com/Lopez-du-63/jv_comp_vision/blob/main/Explore%20augmentations.ipynb).
+  * Memory consumption: I usually had to manually free GPU memory after each training; which prevented me from running the algorithms overnight.. There must be a way to have tensorflow free the memory, but I didn't take the time to check. My computer was also not able to work with 4 batchs. I reduced it to 2 (even 1 when I played with the architecture of the network).
+  * 
+
 #### Reference experiment
 This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+The metrics provided show the loss computed in the different stages of the neural network:
+  * Loss during the classification
+  * Loss during the localization
+  * Loss during the regularization (L2 norm)
+  * And the total loss, which provides information on the end result
 
 ##### Coco metrics for the model
 ![Coco Metrics for reference model](/images/metrics_reference.JPG)
-As can be seen, the learning seems to stabilize close the end of the learning.
+
+As can be seen, the learning seems to stabilize close to the end of the learning.
+On one hand the regularization loss decreases a lot over the learning in a smooth manner, it seems to reach a stable point also. On the other hand, the classification and localization loss go on average down over the learning, but in a chaotic way.
+
+If we try the model on a few test record, we can notice that:
+  * Other vehicles are perceived only when close to them
+  * There are difficulties in detecting vehicles at night
+  * Pedestrians are barely recognized
 
 #### Improve on the reference
 This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
