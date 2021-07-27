@@ -71,7 +71,19 @@ If we try the model on a few test record, we can notice that:
 
 #### Improve on the reference
 This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+
+##### Experiment0
+In this experiment, I added a lot of color distortion, brightness, saturation etc.. Here the [configuration file]()
+After running the experiment, results were catastrophic. Nothing was detected.
+After looking at the metrics, it seems the learning was going smoothly and then suddenly everything went really bad. There must have been some huge outliers which completely disoriented the learning at 12k steps(regularization is computed using L2 norm, which is bad against outliers).
+This gave me the hint to try with a L1 regularizer if I ever distord too much images.
+Here are the metrics from the experiment:
+![Coco Metrics for experiment0 model](/images/metrics_experiment0.JPG)
  
+##### Experiment0_bis
+In this case I tried to distord a lot less the image.
+The results were not really conclusive:
+
 
 
 
