@@ -48,7 +48,8 @@ Training the neural network was really resource greedy. I faces all common issue
   * Long waiting times: This one can be fixed by only checking what happens in the first thousant step and get a feeling of what is coming
   * Lack of options from the proto for image transformations: I think Albumentation is a much more powerful tool. But I sticked with the intented project framework. Plus I wouldn't have been able to use the [Explore augmentation notebook](https://github.com/Lopez-du-63/jv_comp_vision/blob/main/Explore%20augmentations.ipynb).
   * Memory consumption: I usually had to manually free GPU memory after each training; which prevented me from running the algorithms overnight.. There must be a way to have tensorflow free the memory, but I didn't take the time to check. My computer was also not able to work with 4 batchs. I reduced it to 2 (even 1 when I played with the architecture of the network).
-  * 
+
+
 
 #### Reference experiment
 This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
@@ -89,7 +90,10 @@ I wil take the time later on to simply use another pre-trained model. I would li
 Below the results of my different experiments.
 
 ##### Experiment0
-In this experiment, I added a lot of color distortion, brightness, saturation etc.. Here the [configuration file](/config/pipeline_exp0.config)
+In this experiment, I added a lot of color distortion, brightness, saturation etc..
+Here the [configuration file](/config/pipeline_exp0.config)
+
+
 After running the experiment, results were catastrophic. Nothing was detected.
 After looking at the metrics, it seems the learning was going smoothly and then suddenly everything went really bad. There must have been some huge outliers which completely disoriented the learning at 12k steps(regularization is computed using L2 norm, which is bad against outliers).
 This gave me the hint to try with a L1 regularizer if I ever distord too much images.
@@ -112,6 +116,7 @@ In this case I:
   * increase number of layers before prediction
   * increased depth of the feature extractor
 
+
 Here the [configuration file](pipeline_exp1.config)
 The results were not really conclusive. The regularization loss is hudge.
 Nothing was detected when running animation.
@@ -121,6 +126,8 @@ Nothing was detected when running animation.
 ##### Experiment2
 In this case I:
   * used L1 normalizer
+
+
 Here the [configuration file](pipeline_exp2.config)
 The results were not really conclusive. Vehicles were not detected and many pedestrians were detected with bounding boxes forming nearly the whole picture.
 ![Coco Metrics for experiment model](/images/metrics_experiment2.JPG)
@@ -140,7 +147,7 @@ The results were better than in previous experiment, as vehicles were detected. 
 ##### Experiment4
 In this case I:
   * keep a deeper feature extractor but normal bounding box detector
-  
+
 
 Here the [configuration file](pipeline_exp4.config)
 The results were as bas as in experiment2
