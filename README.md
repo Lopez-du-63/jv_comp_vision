@@ -53,8 +53,8 @@ Training the neural network was really resource greedy. I faces all common issue
 #### Reference experiment
 This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
 The metrics provided show the loss computed in the different stages of the neural network:
-  * Loss during the classification
-  * Loss during the localization
+  * Loss during the classification: is there an object or not, and which type ? Usually values should be between 0 and 1; but I happened to have over 1k for one of my experiments with highly noised pictures
+  * Loss during the localization: where is the object detected ?
   * Loss during the regularization (L2 norm)
   * And the total loss, which provides information on the end result
 
@@ -70,10 +70,26 @@ If we try the model on a few test record, we can notice that:
   * Pedestrians are barely recognized
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+The different configuration files can be found in the following [folder](/config)
+I did not succeed improving the pre-trained model. Detections were worse on average. Training time is so long (several hours per experiment) that I only tried a sample of changes:
+  * I changed the architecture:
+    * Increased depth of the feature extractor
+    * Tried L1 norm instead of L2
+    * Increased number of layer for the box predictor
+    * Modified learning step variance
+    * Increased number of steps for the learning
+  * I modified the images:
+    * the croping
+    * the brightness
+    * the contrast
+    * the hue
+    * normalized the image
+
+I wil take the time later on to simply use another pre-trained model. I would like to use the Efficientdet D2 for instance, which provides a greatly improvem mAP for a slighlty worse computation time.
+Below the results of my different experiments.
 
 ##### Experiment0
-In this experiment, I added a lot of color distortion, brightness, saturation etc.. Here the [configuration file]()
+In this experiment, I added a lot of color distortion, brightness, saturation etc.. Here the [configuration file](/config/pipeline_exp0.config)
 After running the experiment, results were catastrophic. Nothing was detected.
 After looking at the metrics, it seems the learning was going smoothly and then suddenly everything went really bad. There must have been some huge outliers which completely disoriented the learning at 12k steps(regularization is computed using L2 norm, which is bad against outliers).
 This gave me the hint to try with a L1 regularizer if I ever distord too much images.
@@ -81,10 +97,59 @@ Here are the metrics from the experiment:
 ![Coco Metrics for experiment0 model](/images/metrics_experiment0.JPG)
  
 ##### Experiment0_bis
-In this case I tried to distord a lot less the image.
-The results were not really conclusive:
+In this case I tried to distord a lot less the image and increased the number of learning steps.
+Here the [configuration file](pipeline_exp0_bis.config)
+
+The results were not really conclusive. Detection range of the vehicle was worse, and there was an increase of False Positive in the animations I generated.
+![Coco Metrics for experiment0 model](/images/metrics_experiment0_bis.JPG)
 
 
+##### Experiment1
+In this case I:
+  * took off the hue modification
+  * decreased the number of learning steps
+  * decreases weight of regularizer in the box predictor
+  * increase number of layers before prediction
+  * increased depth of the feature extractor
+
+Here the [configuration file](pipeline_exp1.config)
+The results were not really conclusive. The regularization loss is hudge.
+Nothing was detected when running animation.
+![Coco Metrics for experiment model](/images/metrics_experiment1.JPG)
+
+
+##### Experiment2
+In this case I:
+  * used L1 normalizer
+Here the [configuration file](pipeline_exp2.config)
+The results were not really conclusive. Vehicles were not detected and many pedestrians were detected with bounding boxes forming nearly the whole picture.
+![Coco Metrics for experiment model](/images/metrics_experiment2.JPG)
+
+
+##### Experiment3
+In this case I:
+  * increased the depth of the box predictor
+  * switched back to L2 normalizer
+
+Here the [configuration file](pipeline_exp3.config)
+The results were better than in previous experiment, as vehicles were detected. But there still was this false pedestrian detection.
+
+![Coco Metrics for experiment](/images/metrics_experiment3.JPG)
+
+
+##### Experiment4
+In this case I:
+  * keep a deeper feature extractor but normal bounding box detector
+  
+
+Here the [configuration file](pipeline_exp4.config)
+The results were as bas as in experiment2
+![Coco Metrics for experiment model](/images/metrics_experiment4.JPG)
+
+
+#### Conclusion
+I did not really improve performance of the reference model. If I keep trying I would use Albumentations to modify images instead. And I would try a different architecture.
+Learning are really quite intensive. In order to optimize models the best is to rent a gpu on the cloud. My computer which has a powerful GPU could barely keep going. More than 2 batches was already too much.
 
 
 ## Data
